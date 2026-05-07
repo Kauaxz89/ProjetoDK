@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dados — Jogos Interativos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/dados.css">
+</head>
+<body class="game-page">
+
+  <a href="index.html" class="back-link">← voltar</a>
+
+  <main class="arena">
+
+    <h1 class="arena-title">Batalha de Dados</h1>
+
+    <!-- Placar -->
+    <div class="scoreboard">
+      <div class="score-side">
+        <span class="score-label">Você</span>
+        <span class="score-num" id="score-player">0</span>
+      </div>
+      <span class="score-sep">×</span>
+      <div class="score-side">
+        <span class="score-label">CPU</span>
+        <span class="score-num" id="score-cpu">0</span>
+      </div>
+    </div>
+
+    <!-- Campo de batalha -->
+    <div class="battlefield">
+
+      <div class="fighter">
+        <span class="fighter-label">Você</span>
+        <div class="dado-wrap">
+          <canvas id="canvas-player" width="120" height="120"></canvas>
+        </div>
+        <span class="dado-valor" id="valor-player">—</span>
+      </div>
+
+      <span class="vs-badge">VS</span>
+
+      <div class="fighter">
+        <span class="fighter-label">CPU</span>
+        <div class="dado-wrap">
+          <canvas id="canvas-cpu" width="120" height="120"></canvas>
+        </div>
+        <span class="dado-valor" id="valor-cpu">—</span>
+      </div>
+
+    </div>
+
+    <!-- Resultado -->
+    <p class="result-banner empty" id="result-banner">—</p>
+
+    <!-- Botão -->
+    <div class="action-wrap">
+      <button class="lancar-btn" id="btn-lancar" onclick="lancarDados()">
+        <span class="btn-icon">🎲</span>
+        <span class="btn-label">Lançar Dados</span>
+      </button>
+      <button class="reset-btn" onclick="resetGame()">Reiniciar placar</button>
+    </div>
+
+    <!-- Histórico -->
+    <div class="history-wrap">
+      <p class="history-title">Histórico</p>
+      <div class="history-list" id="history-list"></div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2026</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/dados.js"></script>
+
+</body>
+</html>

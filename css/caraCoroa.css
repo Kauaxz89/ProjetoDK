@@ -1,0 +1,375 @@
+/* ───────────────────────────────────────────────────────────────
+   cara_coroa.css — Estilos do jogo Cara ou Coroa
+─────────────────────────────────────────────────────────────── */
+
+html, body { height: 100%; overflow: hidden; }
+
+.game-page {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+/* ── Voltar ── */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(240,237,232,0.3);
+  text-decoration: none;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0.6rem 1.5rem;
+  transition: color 0.2s;
+}
+.back-link:hover { color: #e8c84a; }
+
+/* ── Arena grid ── */
+.arena {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  grid-template-rows: auto 1fr auto auto;
+  grid-template-areas:
+    "title   title"
+    "coin    history"
+    "result  history"
+    "choices history";
+  gap: 0.5rem 1rem;
+  padding: 0.4rem 1.5rem;
+  overflow: hidden;
+}
+
+/* ── Título + placar ── */
+.arena-title {
+  grid-area: title;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(30px, 4vw, 46px);
+  letter-spacing: 4px;
+  color: #f0ede8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scoreboard {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #111;
+  border: 0.5px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 0.3rem 1rem;
+}
+
+.score-side { display: flex; flex-direction: column; align-items: center; }
+
+.score-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(240,237,232,0.35);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.score-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 30px;
+  line-height: 1;
+  color: #f0ede8;
+  min-width: 24px;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.score-num.win-flash  { color: #e8c84a; }
+.score-num.lose-flash { color: #e85a4a; }
+
+.score-sep {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: rgba(240,237,232,0.15);
+}
+
+/* ── Área da moeda ── */
+.coin-stage {
+  grid-area: coin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #111;
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Wrapper que faz o arco sobe/desce */
+.coin-arc {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Animação de arco: sobe e volta */
+.coin-arc.throwing {
+  animation: arcThrow 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes arcThrow {
+  0%   { transform: translateY(0px);    }
+  40%  { transform: translateY(-90px);  }
+  100% { transform: translateY(0px);    }
+}
+
+/* A moeda em si — círculo dourado com conteúdo */
+.coin {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  border: 4px solid #c5a332;
+  box-shadow:
+    inset 0 -8px 20px rgba(0,0,0,0.35),
+    inset 0 4px 10px rgba(255,220,80,0.3),
+    0 6px 20px rgba(0,0,0,0.6);
+  user-select: none;
+  transition: background 0.15s;
+}
+
+/* Estado padrão — cara */
+.coin.show-cara {
+  background: radial-gradient(circle at 38% 32%, #f7df72, #c8a430 55%, #8a6a18);
+}
+
+/* Estado coroa */
+.coin.show-coroa {
+  background: radial-gradient(circle at 62% 32%, #e8c84a, #a88820 55%, #6b5010);
+}
+
+/* Giro rápido durante o voo — alterna cara/coroa via JS */
+.coin.spinning {
+  animation: flatSpin 0.12s linear infinite;
+}
+
+@keyframes flatSpin {
+  0%   { transform: scaleX(1); }
+  25%  { transform: scaleX(0); }
+  50%  { transform: scaleX(1); }
+  75%  { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+/* Texto dentro da moeda */
+.coin-symbol {
+  font-size: 40px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4));
+}
+
+.coin-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: #5a3e00;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.2);
+}
+
+/* Esconde conteúdo durante spin (scaleX=0) para não distorcer */
+.coin.spinning .coin-symbol,
+.coin.spinning .coin-text {
+  opacity: 0;
+}
+
+/* Sombra no chão */
+.coin-shadow {
+  position: absolute;
+  bottom: -10px;
+  width: 90px;
+  height: 14px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.5) 0%, transparent 70%);
+  border-radius: 50%;
+  transition: transform 0.1s, opacity 0.1s;
+}
+
+.coin-arc.throwing .coin-shadow {
+  animation: shadowArc 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes shadowArc {
+  0%   { transform: scale(1);    opacity: 0.5; }
+  40%  { transform: scale(0.4);  opacity: 0.15; }
+  100% { transform: scale(1);    opacity: 0.5; }
+}
+
+/* ── Resultado ── */
+.result-banner {
+  grid-area: result;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(20px, 3vw, 30px);
+  letter-spacing: 3px;
+  text-align: center;
+  height: 34px;
+  line-height: 34px;
+  transition: opacity 0.3s;
+}
+
+.result-banner.win   { color: #e8c84a; }
+.result-banner.lose  { color: #e85a4a; }
+.result-banner.empty { opacity: 0; }
+
+/* ── Botões de escolha ── */
+.choices {
+  grid-area: choices;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.choice-btn {
+  background: #111;
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 0.7rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  min-width: 100px;
+}
+
+.choice-btn:hover {
+  background: #1a1a1a;
+  border-color: rgba(232,200,74,0.3);
+  transform: translateY(-3px);
+}
+
+.choice-btn:active { transform: scale(0.95); }
+
+.choice-btn.selected {
+  border-color: #e8c84a;
+  background: #1a1700;
+}
+
+.choice-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.choice-btn .c-icon { font-size: 26px; line-height: 1; user-select: none; }
+
+.choice-btn .c-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'Bebas Neue', sans-serif;
+  color: rgba(240,237,232,0.6);
+}
+
+.choice-btn:hover .c-label { color: #e8c84a; }
+
+/* ── Histórico ── */
+.history-wrap {
+  grid-area: history;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow: hidden;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.history-title {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(240,237,232,0.25);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.reset-btn {
+  background: transparent;
+  border: none;
+  color: rgba(232,90,74,0.4);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+.reset-btn:hover { color: #e85a4a; }
+
+.ia-thinking {
+  font-size: 9px;
+  color: rgba(240,237,232,0.25);
+  letter-spacing: 1px;
+  text-align: center;
+  min-height: 12px;
+  flex-shrink: 0;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.history-list::-webkit-scrollbar { width: 2px; }
+.history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111;
+  border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 5px;
+  padding: 4px 8px;
+  flex-shrink: 0;
+  animation: slideIn 0.25s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.history-item .h-plays  { color: rgba(240,237,232,0.5); font-size: 12px; font-family: 'DM Sans', sans-serif; }
+.history-item .h-result { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; }
+.history-item.win  .h-result { color: #e8c84a; }
+.history-item.lose .h-result { color: #e85a4a; }
+
+/* ── Footer ── */
+.footer { padding: 0.35rem 1.5rem; }
+
+/* ── Responsivo ── */
+@media (max-width: 600px) {
+  html, body { overflow: auto; }
+  .game-page { height: auto; }
+  .arena {
+    grid-template-columns: 1fr;
+    grid-template-areas: "title" "coin" "result" "choices" "history";
+  }
+  .coin-stage { min-height: 200px; }
+  .history-wrap { height: 120px; }
+}

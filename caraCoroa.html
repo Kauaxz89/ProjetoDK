@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cara ou Coroa — Jogos Interativos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/caraCoroa.css">
+</head>
+<body class="game-page">
+
+  <a href="index.html" class="back-link">← voltar</a>
+
+  <main class="arena">
+
+    <!-- Título + placar -->
+    <div class="arena-title">
+      Cara ou Coroa
+      <div class="scoreboard">
+        <div class="score-side">
+          <span class="score-label">Vitórias</span>
+          <span class="score-num" id="score-win">0</span>
+        </div>
+        <span class="score-sep">×</span>
+        <div class="score-side">
+          <span class="score-label">Derrotas</span>
+          <span class="score-num" id="score-lose">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Moeda com arco sobe/desce -->
+    <div class="coin-stage">
+      <div class="coin-arc" id="coin-arc">
+        <div class="coin show-cara" id="coin">
+          <span class="coin-symbol" id="coin-symbol">🧑</span>
+          <span class="coin-text"  id="coin-text">CARA</span>
+        </div>
+        <div class="coin-shadow"></div>
+      </div>
+    </div>
+
+    <!-- Resultado -->
+    <p class="result-banner empty" id="result-banner">—</p>
+
+    <!-- Escolhas -->
+    <div class="choices">
+      <button class="choice-btn" id="btn-cara" onclick="play('cara')">
+        <span class="c-icon">🧑</span>
+        <span class="c-label">Cara</span>
+      </button>
+      <button class="choice-btn" id="btn-coroa" onclick="play('coroa')">
+        <span class="c-icon">👑</span>
+        <span class="c-label">Coroa</span>
+      </button>
+    </div>
+
+    <!-- Histórico -->
+    <div class="history-wrap">
+      <div class="history-header">
+        <span class="history-title">Histórico</span>
+        <button class="reset-btn" onclick="resetGame()">Reiniciar</button>
+      </div>
+      <p class="ia-thinking" id="ia-status"></p>
+      <div class="history-list" id="history-list"></div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>© 2026</p>
+  </footer>
+
+  <script src="js/caraCoroa.js"></script>
+
+</body>
+</html>
