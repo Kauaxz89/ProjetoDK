@@ -11,7 +11,7 @@ Este portal é uma coleção de jogos clássicos desenvolvidos em ambiente web p
 * **Jokenpô (Pedra, Papel ou Tesoura)**: Desafio de estratégia contra a Inteligência Artificial.
 * **Batalha de Dados**: Um teste de sorte pura onde vence quem tirar o maior número no dado.
 * **Cara ou Coroa**: Escolha entre cara ou coroa e veja se o sorteio do sistema coincide com a sua aposta.
-* **BlackJack**: Chegue ao 21 sem estourar. Vença o dealer.
+
 ---
 
 ## Requisitos Técnicos Atendidos
@@ -44,7 +44,6 @@ Este portal é uma coleção de jogos clássicos desenvolvidos em ambiente web p
 : ![Screenshot da tela do jokenpo](img/jokenpo.png)
 : ![Screenshot da tela do cara ou coroa](img/caraOuCoroa.png)
 : ![Screenshot da tela do dados](img/dados.png)
-: ![Screenshot da tela do blackJack](img/blackJack.png)
 ---
 
 ## Como Executar o Projeto
