@@ -1,13 +1,34 @@
-/* ───────────────────────────────────────────────────────────────
-   cara_coroa.css — Estilos do jogo Cara ou Coroa
-─────────────────────────────────────────────────────────────── */
+/* ── Cara ou Coroa — CSS responsivo ── */
 
-html, body { height: 100%; overflow: hidden; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+  --bg:        #0d0d0d;
+  --bg-card:   #111111;
+  --bg-hover:  #1a1a1a;
+  --text:      #f0ede8;
+  --muted:     rgba(240, 237, 232, 0.4);
+  --gold:      #e8c84a;
+  --gold-h:    #f5d86a;
+  --red:       #e85a4a;
+  --border:    rgba(255, 255, 255, 0.06);
+  --font-disp: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --pad-x:     clamp(0.75rem, 4vw, 1.5rem);
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ── Layout principal ── */
 .game-page {
-  height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── Voltar ── */
@@ -20,13 +41,15 @@ html, body { height: 100%; overflow: hidden; }
   text-decoration: none;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  padding: 0.6rem 1.5rem;
+  padding: 0.6rem var(--pad-x);
   transition: color 0.2s;
+  flex-shrink: 0;
 }
-.back-link:hover { color: #e8c84a; }
+.back-link:hover { color: var(--gold); }
 
-/* ── Arena grid ── */
+/* ── Arena: grid de 2 colunas no desktop, 1 no mobile ── */
 .arena {
+  flex: 1;
   display: grid;
   grid-template-columns: 1fr 200px;
   grid-template-rows: auto 1fr auto auto;
@@ -36,60 +59,46 @@ html, body { height: 100%; overflow: hidden; }
     "result  history"
     "choices history";
   gap: 0.5rem 1rem;
-  padding: 0.4rem 1.5rem;
-  overflow: hidden;
+  padding: 0.4rem var(--pad-x);
+  min-height: 0;
 }
 
-/* ── Título + placar ── */
+/* ── Título ── */
 .arena-title {
   grid-area: title;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(30px, 4vw, 46px);
+  font-family: var(--font-disp);
+  font-size: clamp(26px, 5vw, 46px);
   letter-spacing: 4px;
-  color: #f0ede8;
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
+/* ── Placar ── */
 .scoreboard {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  background: #111;
+  gap: 0.5rem;
+  background: var(--bg-card);
   border: 0.5px solid rgba(255,255,255,0.07);
   border-radius: 8px;
-  padding: 0.3rem 1rem;
+  padding: 0.25rem 0.75rem;
 }
-
 .score-side { display: flex; flex-direction: column; align-items: center; }
-
 .score-label {
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(240,237,232,0.35);
-  font-family: 'DM Sans', sans-serif;
+  font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(240,237,232,0.35); font-family: var(--font-body);
 }
-
 .score-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 30px;
-  line-height: 1;
-  color: #f0ede8;
-  min-width: 24px;
-  text-align: center;
-  transition: color 0.3s;
+  font-family: var(--font-disp); font-size: clamp(20px, 4vw, 30px);
+  line-height: 1; color: var(--text); min-width: 20px; text-align: center; transition: color 0.3s;
 }
-
-.score-num.win-flash  { color: #e8c84a; }
-.score-num.lose-flash { color: #e85a4a; }
-
-.score-sep {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  color: rgba(240,237,232,0.15);
-}
+.score-num.win-flash  { color: var(--gold); }
+.score-num.lose-flash { color: var(--red); }
+.score-sep { font-family: var(--font-disp); font-size: 16px; color: rgba(240,237,232,0.15); }
 
 /* ── Área da moeda ── */
 .coin-stage {
@@ -97,36 +106,32 @@ html, body { height: 100%; overflow: hidden; }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #111;
+  background: var(--bg-card);
   border: 0.5px solid rgba(255,255,255,0.06);
   border-radius: 10px;
   overflow: hidden;
   position: relative;
+  min-height: 160px;
 }
 
-/* Wrapper que faz o arco sobe/desce */
 .coin-arc {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-/* Animação de arco: sobe e volta */
 .coin-arc.throwing {
   animation: arcThrow 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
-
 @keyframes arcThrow {
-  0%   { transform: translateY(0px);    }
-  40%  { transform: translateY(-90px);  }
-  100% { transform: translateY(0px);    }
+  0%   { transform: translateY(0px); }
+  40%  { transform: translateY(-70px); }
+  100% { transform: translateY(0px); }
 }
 
-/* A moeda em si — círculo dourado com conteúdo */
 .coin {
-  width: 120px;
-  height: 120px;
+  width: clamp(90px, 15vw, 120px);
+  height: clamp(90px, 15vw, 120px);
   border-radius: 50%;
   position: relative;
   display: flex;
@@ -142,22 +147,9 @@ html, body { height: 100%; overflow: hidden; }
   user-select: none;
   transition: background 0.15s;
 }
-
-/* Estado padrão — cara */
-.coin.show-cara {
-  background: radial-gradient(circle at 38% 32%, #f7df72, #c8a430 55%, #8a6a18);
-}
-
-/* Estado coroa */
-.coin.show-coroa {
-  background: radial-gradient(circle at 62% 32%, #e8c84a, #a88820 55%, #6b5010);
-}
-
-/* Giro rápido durante o voo — alterna cara/coroa via JS */
-.coin.spinning {
-  animation: flatSpin 0.12s linear infinite;
-}
-
+.coin.show-cara  { background: radial-gradient(circle at 38% 32%, #f7df72, #c8a430 55%, #8a6a18); }
+.coin.show-coroa { background: radial-gradient(circle at 62% 32%, #e8c84a, #a88820 55%, #6b5010); }
+.coin.spinning   { animation: flatSpin 0.12s linear infinite; }
 @keyframes flatSpin {
   0%   { transform: scaleX(1); }
   25%  { transform: scaleX(0); }
@@ -166,28 +158,20 @@ html, body { height: 100%; overflow: hidden; }
   100% { transform: scaleX(1); }
 }
 
-/* Texto dentro da moeda */
 .coin-symbol {
-  font-size: 40px;
+  font-size: clamp(28px, 6vw, 40px);
   line-height: 1;
   filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4));
 }
-
 .coin-text {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 13px;
+  font-family: var(--font-disp);
+  font-size: clamp(10px, 2vw, 13px);
   letter-spacing: 3px;
   color: #5a3e00;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.2);
 }
-
-/* Esconde conteúdo durante spin (scaleX=0) para não distorcer */
 .coin.spinning .coin-symbol,
-.coin.spinning .coin-text {
-  opacity: 0;
-}
+.coin.spinning .coin-text { opacity: 0; }
 
-/* Sombra no chão */
 .coin-shadow {
   position: absolute;
   bottom: -10px;
@@ -195,33 +179,29 @@ html, body { height: 100%; overflow: hidden; }
   height: 14px;
   background: radial-gradient(ellipse, rgba(0,0,0,0.5) 0%, transparent 70%);
   border-radius: 50%;
-  transition: transform 0.1s, opacity 0.1s;
 }
-
 .coin-arc.throwing .coin-shadow {
   animation: shadowArc 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
-
 @keyframes shadowArc {
-  0%   { transform: scale(1);    opacity: 0.5; }
-  40%  { transform: scale(0.4);  opacity: 0.15; }
-  100% { transform: scale(1);    opacity: 0.5; }
+  0%   { transform: scale(1);   opacity: 0.5; }
+  40%  { transform: scale(0.4); opacity: 0.15; }
+  100% { transform: scale(1);   opacity: 0.5; }
 }
 
 /* ── Resultado ── */
 .result-banner {
   grid-area: result;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(20px, 3vw, 30px);
+  font-family: var(--font-disp);
+  font-size: clamp(16px, 3vw, 28px);
   letter-spacing: 3px;
   text-align: center;
   height: 34px;
   line-height: 34px;
   transition: opacity 0.3s;
 }
-
-.result-banner.win   { color: #e8c84a; }
-.result-banner.lose  { color: #e85a4a; }
+.result-banner.win   { color: var(--gold); }
+.result-banner.lose  { color: var(--red); }
 .result-banner.empty { opacity: 0; }
 
 /* ── Botões de escolha ── */
@@ -231,52 +211,30 @@ html, body { height: 100%; overflow: hidden; }
   gap: 0.75rem;
   justify-content: center;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
-
 .choice-btn {
-  background: #111;
+  background: var(--bg-card);
   border: 0.5px solid rgba(255,255,255,0.08);
   border-radius: 10px;
-  padding: 0.7rem 1.5rem;
+  padding: 0.65rem 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, transform 0.15s;
-  min-width: 100px;
+  flex: 1;
+  min-width: 90px;
+  max-width: 160px;
 }
-
-.choice-btn:hover {
-  background: #1a1a1a;
-  border-color: rgba(232,200,74,0.3);
-  transform: translateY(-3px);
-}
-
-.choice-btn:active { transform: scale(0.95); }
-
-.choice-btn.selected {
-  border-color: #e8c84a;
-  background: #1a1700;
-}
-
-.choice-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.choice-btn .c-icon { font-size: 26px; line-height: 1; user-select: none; }
-
-.choice-btn .c-label {
-  font-size: 11px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-family: 'Bebas Neue', sans-serif;
-  color: rgba(240,237,232,0.6);
-}
-
-.choice-btn:hover .c-label { color: #e8c84a; }
+.choice-btn:hover        { background: var(--bg-hover); border-color: rgba(232,200,74,0.3); transform: translateY(-3px); }
+.choice-btn:active       { transform: scale(0.95); }
+.choice-btn.selected     { border-color: var(--gold); background: #1a1700; }
+.choice-btn:disabled     { opacity: 0.4; cursor: not-allowed; transform: none; }
+.choice-btn .c-icon      { font-size: clamp(20px, 4vw, 26px); line-height: 1; user-select: none; }
+.choice-btn .c-label     { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-family: var(--font-disp); color: rgba(240,237,232,0.6); }
+.choice-btn:hover .c-label { color: var(--gold); }
 
 /* ── Histórico ── */
 .history-wrap {
@@ -286,90 +244,77 @@ html, body { height: 100%; overflow: hidden; }
   gap: 5px;
   overflow: hidden;
 }
-
 .history-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
 }
-
 .history-title {
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(240,237,232,0.25);
-  font-family: 'DM Sans', sans-serif;
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(240,237,232,0.25); font-family: var(--font-body);
 }
-
 .reset-btn {
-  background: transparent;
-  border: none;
-  color: rgba(232,90,74,0.4);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 9px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 0;
-  transition: color 0.2s;
+  background: transparent; border: none; color: rgba(232,90,74,0.4);
+  font-family: var(--font-body); font-size: 9px; letter-spacing: 1px;
+  text-transform: uppercase; cursor: pointer; padding: 0; transition: color 0.2s;
 }
-.reset-btn:hover { color: #e85a4a; }
-
+.reset-btn:hover { color: var(--red); }
 .ia-thinking {
-  font-size: 9px;
-  color: rgba(240,237,232,0.25);
-  letter-spacing: 1px;
-  text-align: center;
-  min-height: 12px;
-  flex-shrink: 0;
-  font-family: 'DM Sans', sans-serif;
+  font-size: 9px; color: rgba(240,237,232,0.25); letter-spacing: 1px;
+  text-align: center; min-height: 12px; flex-shrink: 0; font-family: var(--font-body);
 }
-
 .history-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  overflow-y: auto;
-  flex: 1;
+  display: flex; flex-direction: column; gap: 4px; overflow-y: auto; flex: 1;
 }
-
 .history-list::-webkit-scrollbar { width: 2px; }
 .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
-
 .history-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #111;
-  border: 0.5px solid rgba(255,255,255,0.05);
-  border-radius: 5px;
-  padding: 4px 8px;
-  flex-shrink: 0;
-  animation: slideIn 0.25s ease;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg-card); border: 0.5px solid rgba(255,255,255,0.05);
+  border-radius: 5px; padding: 4px 8px; flex-shrink: 0; animation: slideIn 0.25s ease;
 }
-
 @keyframes slideIn {
   from { opacity: 0; transform: translateX(6px); }
   to   { opacity: 1; transform: translateX(0); }
 }
-
-.history-item .h-plays  { color: rgba(240,237,232,0.5); font-size: 12px; font-family: 'DM Sans', sans-serif; }
+.history-item .h-plays  { color: rgba(240,237,232,0.5); font-size: 12px; font-family: var(--font-body); }
 .history-item .h-result { font-size: 8px; letter-spacing: 1px; text-transform: uppercase; }
-.history-item.win  .h-result { color: #e8c84a; }
-.history-item.lose .h-result { color: #e85a4a; }
+.history-item.win  .h-result { color: var(--gold); }
+.history-item.lose .h-result { color: var(--red); }
 
 /* ── Footer ── */
-.footer { padding: 0.35rem 1.5rem; }
+.footer {
+  padding: 0.35rem var(--pad-x);
+  border-top: 0.5px solid var(--border);
+  font-size: 11px; color: rgba(240,237,232,0.18); letter-spacing: 1px;
+  font-family: var(--font-body); flex-shrink: 0;
+}
 
-/* ── Responsivo ── */
-@media (max-width: 600px) {
-  html, body { overflow: auto; }
-  .game-page { height: auto; }
+/* ── Responsivo: tablet ── */
+@media (max-width: 768px) {
+  .arena {
+    grid-template-columns: 1fr 160px;
+  }
+}
+
+/* ── Responsivo: mobile ── */
+@media (max-width: 540px) {
   .arena {
     grid-template-columns: 1fr;
-    grid-template-areas: "title" "coin" "result" "choices" "history";
+    grid-template-rows: auto auto auto auto auto;
+    grid-template-areas:
+      "title"
+      "coin"
+      "result"
+      "choices"
+      "history";
+    overflow: visible;
+  }
+  .history-wrap {
+    max-height: 140px;
+    overflow: hidden;
   }
   .coin-stage { min-height: 200px; }
-  .history-wrap { height: 120px; }
+  .arena-title { font-size: clamp(24px, 7vw, 36px); }
 }

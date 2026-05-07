@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blackjack — Jogos Interativos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/blackjack.css">
+</head>
+<body class="game-page">
+
+  <a href="index.html" class="back-link">← voltar</a>
+
+  <main class="arena">
+
+    <!-- Título + placar -->
+    <div class="arena-header">
+      <h1 class="arena-title">Blackjack</h1>
+      <div class="scoreboard">
+        <div class="score-side">
+          <span class="score-label">Vitórias</span>
+          <span class="score-num" id="score-win">0</span>
+        </div>
+        <span class="score-sep">×</span>
+        <div class="score-side">
+          <span class="score-label">Derrotas</span>
+          <span class="score-num" id="score-lose">0</span>
+        </div>
+        <span class="score-sep">×</span>
+        <div class="score-side">
+          <span class="score-label">Empates</span>
+          <span class="score-num" id="score-draw">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+
+      <!-- Mão do dealer -->
+      <div class="hand-section dealer-section">
+        <div class="hand-label">
+          <span>Dealer</span>
+          <span class="hand-value" id="dealer-value">—</span>
+        </div>
+        <div class="cards-row" id="dealer-cards"></div>
+      </div>
+
+      <!-- Resultado central -->
+      <div class="result-zone">
+        <p class="result-banner empty" id="result-banner">—</p>
+      </div>
+
+      <!-- Mão do jogador -->
+      <div class="hand-section player-section">
+        <div class="hand-label">
+          <span>Você</span>
+          <span class="hand-value" id="player-value">—</span>
+        </div>
+        <div class="cards-row" id="player-cards"></div>
+      </div>
+
+    </div>
+
+    <!-- Ações -->
+    <div class="actions" id="actions">
+      <button class="action-btn primary" id="btn-deal" onclick="startGame()">
+        <span class="btn-icon">🃏</span>
+        <span class="btn-label">Distribuir</span>
+      </button>
+      <button class="action-btn" id="btn-hit" onclick="hit()" disabled>
+        <span class="btn-icon">➕</span>
+        <span class="btn-label">Pedir</span>
+      </button>
+      <button class="action-btn" id="btn-stand" onclick="stand()" disabled>
+        <span class="btn-icon">✋</span>
+        <span class="btn-label">Parar</span>
+      </button>
+      <button class="action-btn danger" id="btn-reset" onclick="resetGame()">
+        <span class="btn-label">Reiniciar</span>
+      </button>
+    </div>
+
+    <!-- Histórico -->
+    <div class="history-wrap">
+      <p class="history-title">Histórico</p>
+      <div class="history-list" id="history-list"></div>
+    </div>
+
+  </main>
+
+  <footer class="footer"><p>© 2026</p></footer>
+
+  <script src="js/blackjack.js"></script>
+</body>
+</html>
