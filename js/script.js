@@ -48,7 +48,7 @@
       if (!link) return;
 
       const href = link.getAttribute('href') || '';
-      let icon = '🪙';
+      let icon = '🃏';
 
       Object.keys(map).forEach(function (key) {
         if (href.toLowerCase().includes(key)) icon = map[key];
