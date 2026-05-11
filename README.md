@@ -11,7 +11,7 @@ Este portal é uma coleção de jogos clássicos desenvolvidos em ambiente web p
 * **Jokenpô (Pedra, Papel ou Tesoura)**: Desafio de estratégia contra a Inteligência Artificial.
 * **Batalha de Dados**: Um teste de sorte pura onde vence quem tirar o maior número no dado.
 * **Cara ou Coroa**: Escolha entre cara ou coroa e veja se o sorteio do sistema coincide com a sua aposta.
-
+* **BlackJack**: Chegue ao 21 sem estourar. Vença o dealer.
 ---
 
 ## Requisitos Técnicos Atendidos
@@ -49,5 +49,5 @@ Este portal é uma coleção de jogos clássicos desenvolvidos em ambiente web p
 ## Como Executar o Projeto
 1. Faça o clone deste repositório:
    ```bash
-   git clone [https://github.com/SeuUsuario/arcade-js.git](https://github.com/SeuUsuario/arcade-js.git)
+   git clone [https://github.com/Kauaxz89/ProjetoDK.git](https://github.com/Kauaxz89/ProjetoDK.git)
 2. Navegue até à pasta do projeto e abra o ficheiro index.html em qualquer navegador moderno.
