@@ -44,6 +44,7 @@ Este portal é uma coleção de jogos clássicos desenvolvidos em ambiente web p
 : ![Screenshot da tela do jokenpo](img/jokenpo.png)
 : ![Screenshot da tela do cara ou coroa](img/caraOuCoroa.png)
 : ![Screenshot da tela do dados](img/dados.png)
+: ![Screenshot da tela do BlackJack](img/blackJack.png)
 ---
 
 ## Como Executar o Projeto
