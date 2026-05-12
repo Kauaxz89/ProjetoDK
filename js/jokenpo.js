@@ -39,7 +39,7 @@
   /*
    * O do...while garante que pelo menos uma rodada seja processada.
    * jogoAtivo é definido como true enquanto o jogador continuar jogando.
-   * Cada chamada de play() representa uma iteração do laço.
+   * Cada chamada de play() representa uma interação do laço.
    * O laço é encerrado quando o jogador clica em "Reiniciar placar"
    * (resetGame define jogoAtivo = false e depois true novamente).
    *
