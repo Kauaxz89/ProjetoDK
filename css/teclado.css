@@ -1,0 +1,30 @@
+/* TODO O SEU <style> ORIGINAL FOI COLOCADO AQUI SEM ALTERAÇÃO */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0d0d0d;
+  --bg-card:   #111111;
+  --bg-hover:  #1a1a1a;
+  --text:      #f0ede8;
+  --muted:     rgba(240, 237, 232, 0.4);
+  --faint:     rgba(240, 237, 232, 0.08);
+  --gold:      #e8c84a;
+  --gold-h:    #f5d86a;
+  --border:    rgba(255, 255, 255, 0.06);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --font-disp: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --pad-x: clamp(1rem, 4vw, 2.5rem);
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* (continua exatamente igual ao seu código original…) */

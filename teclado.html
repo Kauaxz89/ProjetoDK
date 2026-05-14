@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teclado Virtual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0d;
+      --bg-card:   #111111;
+      --bg-hover:  #1a1a1a;
+      --text:      #f0ede8;
+      --muted:     rgba(240, 237, 232, 0.4);
+      --faint:     rgba(240, 237, 232, 0.08);
+      --gold:      #e8c84a;
+      --gold-h:    #f5d86a;
+      --border:    rgba(255, 255, 255, 0.06);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --font-disp: 'Bebas Neue', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --pad-x: clamp(1rem, 4vw, 2.5rem);
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .header {
+      padding: clamp(1.5rem, 5vw, 3rem) var(--pad-x) 1rem;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      animation: fadeUp 0.7s ease forwards;
+      opacity: 0;
+    }
+    .header h1 {
+      font-family: var(--font-disp);
+      font-size: clamp(32px, 8vw, 64px);
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .header a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 1.5px;
+      transition: color 0.2s;
+    }
+    .header a:hover { color: var(--gold); }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    main {
+      padding: clamp(2rem, 5vw, 3rem) var(--pad-x);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    /* ─── Nota tocando ── */
+    .nota-display {
+      text-align: center;
+    }
+    .nota-nome {
+      font-family: var(--font-disp);
+      font-size: clamp(56px, 14vw, 96px);
+      letter-spacing: 6px;
+      color: var(--gold);
+      line-height: 1;
+      min-height: 1em;
+      transition: transform 0.12s ease, opacity 0.3s ease;
+      opacity: 0.1;
+    }
+    .nota-nome.tocando {
+      opacity: 1;
+      animation: pingNota 0.35s ease;
+    }
+    @keyframes pingNota {
+      0%   { transform: scale(0.8); }
+      60%  { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .nota-freq {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ─── Ondas visualizador ── */
+    .visualizador {
+      width: 100%;
+      max-width: 600px;
+      height: 40px;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      justify-content: center;
+    }
+    .onda-bar {
+      width: 4px;
+      border-radius: 2px;
+      background: rgba(232,200,74,0.2);
+      height: 4px;
+      transition: height 0.1s ease, background 0.2s ease;
+    }
+
+    /* ─── Histórico ── */
+    .historico {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      min-height: 24px;
+    }
+    .hist-tag {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      padding: 2px 8px;
+      border: 0.5px solid var(--border);
+      border-radius: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } }
+
+    /* ─── Teclado ── */
+    .teclado-container {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .teclado {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      width: fit-content;
+      margin: 0 auto;
+      height: clamp(160px, 28vw, 220px);
+    }
+
+    /* Teclas brancas */
+    .tecla-branca {
+      position: relative;
+      width: clamp(44px, 7vw, 64px);
+      height: 100%;
+      background: #e8e4dc;
+      border: 1px solid rgba(0,0,0,0.3);
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 10px;
+      gap: 4px;
+      transition: background 0.08s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 1;
+    }
+    .tecla-branca:hover { background: #f0ece4; }
+    .tecla-branca.pressionada {
+      background: var(--gold);
+      transform: translateY(2px);
+    }
+    .tecla-branca .nota-label {
+      font-family: var(--font-disp);
+      font-size: clamp(13px, 2vw, 16px);
+      letter-spacing: 1px;
+      color: #333;
+    }
+    .tecla-branca .key-hint {
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: rgba(0,0,0,0.3);
+      text-transform: uppercase;
+    }
+
+    /* Teclas pretas */
+    .tecla-preta {
+      position: absolute;
+      width: clamp(28px, 4.5vw, 40px);
+      height: 58%;
+      background: #1a1a1a;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 3px solid #000;
+      border-radius: 0 0 4px 4px;
+      cursor: pointer;
+      z-index: 2;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 6px;
+      gap: 2px;
+      transition: background 0.08s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tecla-preta:hover { background: #2a2a2a; }
+    .tecla-preta.pressionada {
+      background: rgba(232,200,74,0.6);
+      transform: translateY(2px);
+    }
+    .tecla-preta .nota-label {
+      font-family: var(--font-disp);
+      font-size: clamp(9px, 1.5vw, 11px);
+      letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.5);
+    }
+    .tecla-preta .key-hint {
+      font-size: 8px;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ─── Controles ── */
+    .controls-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-ctrl {
+      padding: 8px 18px;
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--muted);
+      font-family: var(--font-body);
+      font-size: 12px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .btn-ctrl:hover { background: var(--bg-hover); color: var(--text); border-color: rgba(255,255,255,0.1); }
+    .btn-ctrl.ativo { color: var(--gold); border-color: rgba(232,200,74,0.35); }
+
+    /* ─── Gravação ── */
+    .gravacao-bar {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .rec-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,80,80,0.3);
+      flex-shrink: 0;
+    }
+    .rec-dot.gravando {
+      background: #ff5050;
+      animation: piscar 0.8s ease infinite;
+    }
+    @keyframes piscar {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.2; }
+    }
+    .gravacao-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      flex: 1;
+    }
+    .gravacao-notas {
+      font-size: 11px;
+      color: rgba(232,200,74,0.4);
+      letter-spacing: 1px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 200px;
+    }
+
+    .footer {
+      padding: 1rem var(--pad-x);
+      border-top: 0.5px solid var(--border);
+      font-size: 11px;
+      color: rgba(240,237,232,0.18);
+      letter-spacing: 1px;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>Teclado Virtual</h1>
+    <div class="header-right">
+      <a href="index.html">← Voltar</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Nota tocando -->
+    <div class="nota-display">
+      <div class="nota-nome" id="nota-nome">—</div>
+      <div class="nota-freq" id="nota-freq">Toque uma tecla</div>
+    </div>
+
+    <!-- Visualizador de ondas -->
+    <div class="visualizador" id="visualizador"></div>
+
+    <!-- Histórico -->
+    <div class="historico" id="historico"></div>
+
+    <!-- Teclado -->
+    <div class="teclado-container">
+      <div class="teclado" id="teclado"></div>
+    </div>
+
+    <!-- Oitava -->
+    <div class="controls-row">
+      <button class="btn-ctrl" onclick="mudarOitava(-1)">↓ Oitava</button>
+      <span id="oitava-label" style="font-family:var(--font-disp);font-size:20px;letter-spacing:2px;color:var(--muted);align-self:center;">4</span>
+      <button class="btn-ctrl" onclick="mudarOitava(1)">↑ Oitava</button>
+      <button class="btn-ctrl" id="btn-rec" onclick="toggleGravacao()">⏺ Gravar</button>
+      <button class="btn-ctrl" id="btn-play" onclick="reproduzir()" disabled>▶ Reproduzir</button>
+    </div>
+
+    <!-- Gravação -->
+    <div class="gravacao-bar" id="gravacao-bar">
+      <div class="rec-dot" id="rec-dot"></div>
+      <span class="gravacao-label" id="gravacao-label">Pronto para gravar</span>
+      <span class="gravacao-notas" id="gravacao-notas"></span>
+    </div>
+
+  </main>
+
+  <footer class="footer"><p>© 2026</p></footer>
+
+  <script>
+    // ─── Configuração das notas ──────────────────────────────────
+    const NOTAS_BRANCAS = [
+      { nota: 'Dó', nome: 'C', key: 'a' },
+      { nota: 'Ré', nome: 'D', key: 's' },
+      { nota: 'Mi', nome: 'E', key: 'd' },
+      { nota: 'Fá', nome: 'F', key: 'f' },
+      { nota: 'Sol', nome: 'G', key: 'g' },
+      { nota: 'Lá', nome: 'A', key: 'h' },
+      { nota: 'Si', nome: 'B', key: 'j' },
+      // Oitava extra
+      { nota: 'Dó²', nome: 'C2', key: 'k' },
+      { nota: 'Ré²', nome: 'D2', key: 'l' },
+    ];
+
+    const NOTAS_PRETAS = [
+      { nota: 'Dó#', nome: 'C#', pos: 0, key: 'w' },
+      { nota: 'Ré#', nome: 'D#', pos: 1, key: 'e' },
+      { nota: 'Fá#', nome: 'F#', pos: 3, key: 't' },
+      { nota: 'Sol#', nome: 'G#', pos: 4, key: 'y' },
+      { nota: 'Lá#', nome: 'A#', pos: 5, key: 'u' },
+    ];
+
+    // Frequências base oitava 4
+    const FREQS_BASE = {
+      'C': 261.63, 'C#': 277.18, 'D': 293.66, 'D#': 311.13,
+      'E': 329.63, 'F': 349.23, 'F#': 369.99,
+      'G': 392.00, 'G#': 415.30, 'A': 440.00, 'A#': 466.16,
+      'B': 493.88, 'C2': 523.25, 'D2': 587.33,
+    };
+
+    let oitava = 4;
+    let audioCtx = null;
+    let gravando = false;
+    let sequencia = [];
+    let tempoInicio = null;
+    let reproduzindo = false;
+
+    function getFreq(nome) {
+      const base = FREQS_BASE[nome];
+      const mult = Math.pow(2, oitava - 4);
+      return base * mult;
+    }
+
+    function getAudioCtx() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx;
+    }
+
+    // ─── Sons ─────────────────────────────────────────────────────
+    function tocarNota(nome, notaDisplay, freq) {
+      const ctx = getAudioCtx();
+
+      // Oscilador principal
+      const osc   = ctx.createOscillator();
+      const gain  = ctx.createGain();
+      // Harmônico
+      const osc2  = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+
+      osc.type  = 'triangle';
+      osc.frequency.value = freq;
+      osc2.type = 'sine';
+      osc2.frequency.value = freq * 2;
+
+      const t = ctx.currentTime;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.25, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 1.2);
+      gain2.gain.setValueAtTime(0, t);
+      gain2.gain.linearRampToValueAtTime(0.06, t + 0.01);
+      gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
+
+      osc.start(t);
+      osc.stop(t + 1.3);
+      osc2.start(t);
+      osc2.stop(t + 0.9);
+
+      // UI
+      document.getElementById('nota-nome').textContent = notaDisplay;
+      document.getElementById('nota-nome').classList.remove('tocando');
+      void document.getElementById('nota-nome').offsetWidth;
+      document.getElementById('nota-nome').classList.add('tocando');
+      document.getElementById('nota-freq').textContent = Math.round(freq) + ' Hz';
+
+      animarOndas();
+      adicionarHistorico(notaDisplay);
+
+      // Gravar
+      if (gravando) {
+        const t2 = Date.now();
+        if (!tempoInicio) tempoInicio = t2;
+        sequencia.push({ nome, notaDisplay, freq, time: t2 - tempoInicio });
+        document.getElementById('gravacao-notas').textContent =
+          sequencia.map(n => n.notaDisplay).join(' · ');
+      }
+    }
+
+    // ─── Visualizador de ondas ──────────────────────────────────
+    const vizEl = document.getElementById('visualizador');
+    for (let i = 0; i < 24; i++) {
+      const b = document.createElement('div');
+      b.className = 'onda-bar';
+      vizEl.appendChild(b);
+    }
+
+    function animarOndas() {
+      const bars = vizEl.querySelectorAll('.onda-bar');
+      bars.forEach((b, i) => {
+        const h = 4 + Math.random() * 32;
+        b.style.height = h + 'px';
+        b.style.background = 'rgba(232,200,74,' + (0.3 + Math.random() * 0.7) + ')';
+        setTimeout(() => {
+          b.style.height = '4px';
+          b.style.background = 'rgba(232,200,74,0.2)';
+        }, 200 + i * 12);
+      });
+    }
+
+    // ─── Histórico ──────────────────────────────────────────────
+    let historico = [];
+    function adicionarHistorico(nota) {
+      historico.push(nota);
+      if (historico.length > 10) historico.shift();
+      const el = document.getElementById('historico');
+      el.innerHTML = historico.map(n =>
+        `<span class="hist-tag">${n}</span>`
+      ).join('');
+    }
+
+    // ─── Construção do teclado ───────────────────────────────────
+    function construirTeclado() {
+      const teclado = document.getElementById('teclado');
+      teclado.innerHTML = '';
+
+      const larguraBranca = parseInt(getComputedStyle(document.documentElement)
+        .getPropertyValue('--tecla-w') || '0') || 60;
+
+      // Obter largura real via CSS
+      const tempBranca = document.createElement('div');
+      tempBranca.className = 'tecla-branca';
+      tempBranca.style.visibility = 'hidden';
+      teclado.appendChild(tempBranca);
+      const realW = tempBranca.offsetWidth || 56;
+      teclado.removeChild(tempBranca);
+      const pretaW = realW * 0.62;
+
+      NOTAS_BRANCAS.forEach((n, i) => {
+        const t = document.createElement('div');
+        t.className = 'tecla-branca';
+        t.dataset.nome = n.nome;
+        t.innerHTML = `<span class="nota-label">${n.nota}</span><span class="key-hint">${n.key}</span>`;
+        t.addEventListener('mousedown', () => pressionar(n.nome, n.nota));
+        t.addEventListener('touchstart', e => { e.preventDefault(); pressionar(n.nome, n.nota); });
+        teclado.appendChild(t);
+      });
+
+      // Teclas pretas — posicionadas sobre brancas
+      NOTAS_PRETAS.forEach(n => {
+        const t = document.createElement('div');
+        t.className = 'tecla-preta';
+        t.dataset.nome = n.nome;
+        t.innerHTML = `<span class="nota-label">${n.nota}</span><span class="key-hint">${n.key}</span>`;
+
+        // Posição: centro da branca[pos] + metade da branca - metade da preta
+        const left = n.pos * realW + realW * 0.68;
+        t.style.left = left + 'px';
+        t.style.width = pretaW + 'px';
+
+        t.addEventListener('mousedown', e => { e.stopPropagation(); pressionar(n.nome, n.nota); });
+        t.addEventListener('touchstart', e => { e.preventDefault(); e.stopPropagation(); pressionar(n.nome, n.nota); });
+        teclado.appendChild(t);
+      });
+    }
+
+    function pressionar(nome, notaDisplay) {
+      const freq = getFreq(nome);
+      tocarNota(nome, notaDisplay, freq);
+
+      // Feedback visual
+      const tecla = document.querySelector(`[data-nome="${nome}"]`);
+      if (tecla) {
+        tecla.classList.add('pressionada');
+        setTimeout(() => tecla.classList.remove('pressionada'), 200);
+      }
+    }
+
+    // ─── Teclado físico ─────────────────────────────────────────
+    const keyMap = {};
+    [...NOTAS_BRANCAS, ...NOTAS_PRETAS].forEach(n => {
+      keyMap[n.key] = { nome: n.nome, nota: n.nota };
+    });
+
+    const pressionadas = new Set();
+    document.addEventListener('keydown', e => {
+      const k = e.key.toLowerCase();
+      if (pressionadas.has(k)) return;
+      if (keyMap[k]) {
+        pressionadas.add(k);
+        pressionar(keyMap[k].nome, keyMap[k].nota);
+      }
+    });
+    document.addEventListener('keyup', e => {
+      pressionadas.delete(e.key.toLowerCase());
+    });
+
+    // ─── Oitava ─────────────────────────────────────────────────
+    function mudarOitava(delta) {
+      oitava = Math.max(2, Math.min(6, oitava + delta));
+      document.getElementById('oitava-label').textContent = oitava;
+    }
+
+    // ─── Gravação ───────────────────────────────────────────────
+    function toggleGravacao() {
+      gravando = !gravando;
+      const btn = document.getElementById('btn-rec');
+      const dot = document.getElementById('rec-dot');
+      const lbl = document.getElementById('gravacao-label');
+
+      if (gravando) {
+        sequencia = [];
+        tempoInicio = null;
+        btn.textContent = '⏹ Parar';
+        btn.classList.add('ativo');
+        dot.classList.add('gravando');
+        lbl.textContent = 'Gravando...';
+        document.getElementById('gravacao-notas').textContent = '';
+        document.getElementById('btn-play').disabled = true;
+      } else {
+        btn.textContent = '⏺ Gravar';
+        btn.classList.remove('ativo');
+        dot.classList.remove('gravando');
+        lbl.textContent = 'Gravação pronta — ' + sequencia.length + ' nota(s)';
+        document.getElementById('btn-play').disabled = sequencia.length === 0;
+      }
+    }
+
+    function reproduzir() {
+      if (reproduzindo || sequencia.length === 0) return;
+      reproduzindo = true;
+      document.getElementById('btn-play').disabled = true;
+      document.getElementById('gravacao-label').textContent = 'Reproduzindo...';
+
+      sequencia.forEach(n => {
+        setTimeout(() => {
+          pressionar(n.nome, n.notaDisplay);
+        }, n.time);
+      });
+
+      const duracao = sequencia[sequencia.length - 1].time + 1500;
+      setTimeout(() => {
+        reproduzindo = false;
+        document.getElementById('btn-play').disabled = false;
+        document.getElementById('gravacao-label').textContent = 'Reprodução concluída';
+      }, duracao);
+    }
+
+    // ─── Init ───────────────────────────────────────────────────
+    construirTeclado();
+    window.addEventListener('resize', construirTeclado);
+  </script>
+
+</body>
+</html>
