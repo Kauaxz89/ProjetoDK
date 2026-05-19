@@ -1,30 +1,300 @@
-/* TODO O SEU <style> ORIGINAL FOI COLOCADO AQUI SEM ALTERAÇÃO */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0d0d0d;
+      --bg-card:   #111111;
+      --bg-hover:  #1a1a1a;
+      --text:      #f0ede8;
+      --muted:     rgba(240, 237, 232, 0.4);
+      --faint:     rgba(240, 237, 232, 0.08);
+      --gold:      #e8c84a;
+      --gold-h:    #f5d86a;
+      --border:    rgba(255, 255, 255, 0.06);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --font-disp: 'Bebas Neue', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --pad-x: clamp(1rem, 4vw, 2.5rem);
+    }
 
-:root {
-  --bg:        #0d0d0d;
-  --bg-card:   #111111;
-  --bg-hover:  #1a1a1a;
-  --text:      #f0ede8;
-  --muted:     rgba(240, 237, 232, 0.4);
-  --faint:     rgba(240, 237, 232, 0.08);
-  --gold:      #e8c84a;
-  --gold-h:    #f5d86a;
-  --border:    rgba(255, 255, 255, 0.06);
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --font-disp: 'Bebas Neue', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --pad-x: clamp(1rem, 4vw, 2.5rem);
-}
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-body {
-  font-family: var(--font-body);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+    .header {
+      padding: clamp(1.5rem, 5vw, 3rem) var(--pad-x) 1rem;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      animation: fadeUp 0.7s ease forwards;
+      opacity: 0;
+    }
+    .header h1 {
+      font-family: var(--font-disp);
+      font-size: clamp(32px, 8vw, 64px);
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .header a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 1.5px;
+      transition: color 0.2s;
+    }
+    .header a:hover { color: var(--gold); }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-/* (continua exatamente igual ao seu código original…) */
+    main {
+      padding: clamp(2rem, 5vw, 3rem) var(--pad-x);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    /* ─── Nota tocando ── */
+    .nota-display {
+      text-align: center;
+    }
+    .nota-nome {
+      font-family: var(--font-disp);
+      font-size: clamp(56px, 14vw, 96px);
+      letter-spacing: 6px;
+      color: var(--gold);
+      line-height: 1;
+      min-height: 1em;
+      transition: transform 0.12s ease, opacity 0.3s ease;
+      opacity: 0.1;
+    }
+    .nota-nome.tocando {
+      opacity: 1;
+      animation: pingNota 0.35s ease;
+    }
+    @keyframes pingNota {
+      0%   { transform: scale(0.8); }
+      60%  { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .nota-freq {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ─── Ondas visualizador ── */
+    .visualizador {
+      width: 100%;
+      max-width: 600px;
+      height: 40px;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      justify-content: center;
+    }
+    .onda-bar {
+      width: 4px;
+      border-radius: 2px;
+      background: rgba(232,200,74,0.2);
+      height: 4px;
+      transition: height 0.1s ease, background 0.2s ease;
+    }
+
+    /* ─── Histórico ── */
+    .historico {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      min-height: 24px;
+    }
+    .hist-tag {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      padding: 2px 8px;
+      border: 0.5px solid var(--border);
+      border-radius: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } }
+
+    /* ─── Teclado ── */
+    .teclado-container {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .teclado {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      width: fit-content;
+      margin: 0 auto;
+      height: clamp(160px, 28vw, 220px);
+    }
+
+    /* Teclas brancas */
+    .tecla-branca {
+      position: relative;
+      width: clamp(44px, 7vw, 64px);
+      height: 100%;
+      background: #e8e4dc;
+      border: 1px solid rgba(0,0,0,0.3);
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 10px;
+      gap: 4px;
+      transition: background 0.08s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 1;
+    }
+    .tecla-branca:hover { background: #f0ece4; }
+    .tecla-branca.pressionada {
+      background: var(--gold);
+      transform: translateY(2px);
+    }
+    .tecla-branca .nota-label {
+      font-family: var(--font-disp);
+      font-size: clamp(13px, 2vw, 16px);
+      letter-spacing: 1px;
+      color: #333;
+    }
+    .tecla-branca .key-hint {
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: rgba(0,0,0,0.3);
+      text-transform: uppercase;
+    }
+
+    /* Teclas pretas */
+    .tecla-preta {
+      position: absolute;
+      width: clamp(28px, 4.5vw, 40px);
+      height: 58%;
+      background: #1a1a1a;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 3px solid #000;
+      border-radius: 0 0 4px 4px;
+      cursor: pointer;
+      z-index: 2;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 6px;
+      gap: 2px;
+      transition: background 0.08s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tecla-preta:hover { background: #2a2a2a; }
+    .tecla-preta.pressionada {
+      background: rgba(232,200,74,0.6);
+      transform: translateY(2px);
+    }
+    .tecla-preta .nota-label {
+      font-family: var(--font-disp);
+      font-size: clamp(9px, 1.5vw, 11px);
+      letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.5);
+    }
+    .tecla-preta .key-hint {
+      font-size: 8px;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ─── Controles ── */
+    .controls-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-ctrl {
+      padding: 8px 18px;
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--muted);
+      font-family: var(--font-body);
+      font-size: 12px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .btn-ctrl:hover { background: var(--bg-hover); color: var(--text); border-color: rgba(255,255,255,0.1); }
+    .btn-ctrl.ativo { color: var(--gold); border-color: rgba(232,200,74,0.35); }
+
+    /* ─── Gravação ── */
+    .gravacao-bar {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .rec-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,80,80,0.3);
+      flex-shrink: 0;
+    }
+    .rec-dot.gravando {
+      background: #ff5050;
+      animation: piscar 0.8s ease infinite;
+    }
+    @keyframes piscar {
+      0%,100% { opacity: 1; }
+      50%      { opacity: 0.2; }
+    }
+    .gravacao-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      flex: 1;
+    }
+    .gravacao-notas {
+      font-size: 11px;
+      color: rgba(232,200,74,0.4);
+      letter-spacing: 1px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 200px;
+    }
+
+    .footer {
+      padding: 1rem var(--pad-x);
+      border-top: 0.5px solid var(--border);
+      font-size: 11px;
+      color: rgba(240,237,232,0.18);
+      letter-spacing: 1px;
+      margin-top: 1rem;
+    }
