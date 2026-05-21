@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cofrinho Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/cofrinho.css">
+</head>
+<body>
+
+  <header class="header">
+    <h1>Cofrinho Digital</h1>
+    <a href="index.html">← Voltar</a>
+  </header>
+
+  <main>
+
+    <!-- Cofre visual -->
+    <div class="cofre-wrap">
+      <div class="cofre-svg-container">
+        <svg class="cofre-svg" id="cofre-svg" viewBox="0 0 140 130" xmlns="http://www.w3.org/2000/svg">
+          <!-- Corpo -->
+          <rect x="20" y="40" width="100" height="75" rx="14" fill="#1a1a1a" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+          <!-- Nível de preenchimento (mascara) -->
+          <clipPath id="fill-clip">
+            <rect x="20" y="40" width="100" height="75" rx="14"/>
+          </clipPath>
+          <rect id="cofre-nivel" x="20" y="115" width="100" height="0" clip-path="url(#fill-clip)" fill="rgba(232,200,74,0.12)" transition="y 0.5s ease, height 0.5s ease"/>
+          <!-- Fresta de moeda no topo -->
+          <rect x="56" y="38" width="28" height="5" rx="2.5" fill="#0d0d0d" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+          <!-- Olho da fechadura -->
+          <circle cx="70" cy="80" r="10" fill="#0d0d0d" stroke="rgba(255,255,255,0.08)" stroke-width="0.8"/>
+          <circle cx="70" cy="78" r="4" fill="#222"/>
+          <rect x="68" y="82" width="4" height="7" rx="2" fill="#222"/>
+          <!-- Dobradiça esquerda -->
+          <rect x="20" y="58" width="6" height="10" rx="3" fill="#2a2a2a" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+          <rect x="20" y="80" width="6" height="10" rx="3" fill="#2a2a2a" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+          <!-- Pezinhos -->
+          <rect x="32" y="113" width="16" height="8" rx="4" fill="#151515"/>
+          <rect x="92" y="113" width="16" height="8" rx="4" fill="#151515"/>
+        </svg>
+      </div>
+
+      <div class="cofre-fill-bar">
+        <div class="cofre-fill-inner" id="fill-bar"></div>
+      </div>
+      <div class="cofre-fill-label">
+        <span>R$ 0,00</span>
+        <span id="fill-pct">0%</span>
+      </div>
+    </div>
+
+    <!-- Saldo -->
+    <div class="saldo-card">
+      <div class="saldo-label">Saldo atual</div>
+      <div class="saldo-valor" id="saldo">R$ 0,00</div>
+    </div>
+
+    <!-- Contagem por moeda -->
+    <div class="moedas-detalhe">
+      <div class="moeda-item">
+        <div class="moeda-item-val">R$ 0,10</div>
+        <div class="moeda-item-qtd" id="qtd-10">0</div>
+      </div>
+      <div class="moeda-item">
+        <div class="moeda-item-val">R$ 0,25</div>
+        <div class="moeda-item-qtd" id="qtd-25">0</div>
+      </div>
+      <div class="moeda-item">
+        <div class="moeda-item-val">R$ 0,50</div>
+        <div class="moeda-item-qtd" id="qtd-50">0</div>
+      </div>
+      <div class="moeda-item">
+        <div class="moeda-item-val">R$ 1,00</div>
+        <div class="moeda-item-qtd" id="qtd-100">0</div>
+      </div>
+    </div>
+
+    <!-- Botões moedas -->
+    <div class="moedas-grid">
+      <button class="btn-moeda" onclick="adicionarMoeda(10)">R$<br>0,10</button>
+      <button class="btn-moeda" onclick="adicionarMoeda(25)">R$<br>0,25</button>
+      <button class="btn-moeda" onclick="adicionarMoeda(50)">R$<br>0,50</button>
+      <button class="btn-moeda" onclick="adicionarMoeda(100)">R$<br>1,00</button>
+    </div>
+
+    <!-- Sacar / Esvaziar -->
+    <div class="acoes">
+      <button class="btn-acao btn-sacar" onclick="abrirModal()">Sacar</button>
+      <button class="btn-acao btn-esvaziar" onclick="esvaziar()">Esvaziar Cofre</button>
+    </div>
+
+  </main>
+
+  <footer class="footer"><p>© 2026</p></footer>
+
+  <!-- Modal saque -->
+  <div class="overlay" id="overlay" onclick="fecharModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <h3>Sacar Valor</h3>
+      <div class="modal-input-wrap">
+        <span class="modal-prefix">R$</span>
+        <input type="number" id="input-saque" placeholder="0,00" min="0" step="0.01">
+      </div>
+      <div class="modal-btns">
+        <button class="modal-confirmar" onclick="confirmarSaque()">Confirmar</button>
+        <button class="modal-cancelar" onclick="fecharModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+<script src="js/cofrinho.js"></script>
+</body>
+</html>
