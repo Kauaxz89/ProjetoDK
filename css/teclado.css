@@ -1,22 +1,29 @@
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
     :root {
       --bg:        #0d0d0d;
       --bg-card:   #111111;
       --bg-hover:  #1a1a1a;
       --text:      #f0ede8;
       --muted:     rgba(240, 237, 232, 0.4);
-      --faint:     rgba(240, 237, 232, 0.08);
       --gold:      #e8c84a;
-      --gold-h:    #f5d86a;
       --border:    rgba(255, 255, 255, 0.06);
       --radius-sm: 6px;
-      --radius-md: 10px;
       --font-disp: 'Bebas Neue', sans-serif;
       --font-body: 'DM Sans', sans-serif;
       --pad-x: clamp(1rem, 4vw, 2.5rem);
+ 
+      /* Teclas */
+      --key-w-top:    #ddd8ce;
+      --key-w-front:  #c8c3b8;
+      --key-w-side:   #b0ac9f;
+      --key-b-top:    #1c1c1c;
+      --key-b-front:  #111111;
+      --key-b-side:   #0a0a0a;
+      --key-depth:    8px;   /* espessura 3D */
+      --key-gap:      4px;
     }
-
+ 
     body {
       font-family: var(--font-body);
       background: var(--bg);
@@ -24,7 +31,7 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-
+ 
     .header {
       padding: clamp(1.5rem, 5vw, 3rem) var(--pad-x) 1rem;
       border-bottom: 0.5px solid var(--border);
@@ -52,7 +59,7 @@
     }
     .header a:hover { color: var(--gold); }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
+ 
     main {
       padding: clamp(2rem, 5vw, 3rem) var(--pad-x);
       display: flex;
@@ -60,11 +67,9 @@
       align-items: center;
       gap: 2rem;
     }
-
+ 
     /* ─── Nota tocando ── */
-    .nota-display {
-      text-align: center;
-    }
+    .nota-display { text-align: center; }
     .nota-nome {
       font-family: var(--font-disp);
       font-size: clamp(56px, 14vw, 96px);
@@ -91,7 +96,7 @@
       color: var(--muted);
       margin-top: 4px;
     }
-
+ 
     /* ─── Ondas visualizador ── */
     .visualizador {
       width: 100%;
@@ -109,7 +114,7 @@
       height: 4px;
       transition: height 0.1s ease, background 0.2s ease;
     }
-
+ 
     /* ─── Histórico ── */
     .historico {
       display: flex;
@@ -128,33 +133,66 @@
       animation: fadeIn 0.2s ease;
     }
     @keyframes fadeIn { from { opacity: 0; transform: scale(0.8); } }
-
-    /* ─── Teclado ── */
-    .teclado-container {
+ 
+    /* ──────────────────────────────────────────────
+       TECLADO 3D
+       Abordagem: perspectiva CSS + faces simuladas
+    ─────────────────────────────────────────────── */
+    .teclado-scene {
       width: 100%;
       overflow-x: auto;
-      padding-bottom: 8px;
+      padding-bottom: 24px;
+      /* perspectiva para dar sensação de profundidade 3D leve */
+      perspective: 800px;
     }
-
-    .teclado {
-      position: relative;
-      display: flex;
+ 
+    .teclado-stage {
+      display: inline-flex;
       align-items: flex-start;
       gap: 0;
-      width: fit-content;
+      position: relative;
+      /* Inclinar o teclado levemente como se visto de cima */
+      transform: rotateX(18deg) rotateY(-2deg);
+      transform-style: preserve-3d;
+      transform-origin: center top;
       margin: 0 auto;
-      height: clamp(160px, 28vw, 220px);
+      display: flex;
+      width: fit-content;
+      height: clamp(180px, 30vw, 240px);
     }
-
-    /* Teclas brancas */
+ 
+    /* ─── BASE DO TECLADO ── */
+    .teclado-base {
+      position: absolute;
+      bottom: calc(-1 * var(--key-depth) - 4px);
+      left: -8px; right: -8px;
+      height: 24px;
+      background: #1a1a1a;
+      border-radius: 0 0 8px 8px;
+      transform: translateZ(calc(-1 * var(--key-depth)));
+      box-shadow: 0 8px 32px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.5);
+    }
+ 
+    /* ─── TECLA BRANCA 3D ── */
     .tecla-branca {
       position: relative;
       width: clamp(44px, 7vw, 64px);
       height: 100%;
-      background: #e8e4dc;
-      border: 1px solid rgba(0,0,0,0.3);
-      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
       cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transform-style: preserve-3d;
+      z-index: 1;
+      transition: transform 0.08s ease;
+    }
+ 
+    /* Face superior (top) */
+    .tecla-branca .face-top {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(170deg, #eeece6 0%, #d8d4cc 100%);
+      border: 1px solid rgba(0,0,0,0.25);
+      border-radius: 2px 2px 5px 5px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -162,20 +200,57 @@
       padding-bottom: 10px;
       gap: 4px;
       transition: background 0.08s ease;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      z-index: 1;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.6),
+        inset -1px 0 0 rgba(0,0,0,0.08),
+        inset 1px 0 0 rgba(255,255,255,0.3);
     }
-    .tecla-branca:hover { background: #f0ece4; }
+ 
+    /* Face frontal (depth) */
+    .tecla-branca .face-front {
+      position: absolute;
+      bottom: calc(-1 * var(--key-depth));
+      left: 0; right: 0;
+      height: var(--key-depth);
+      background: linear-gradient(to bottom, #c0bbb3, #a8a49c);
+      border-radius: 0 0 4px 4px;
+      transform-origin: top;
+    }
+ 
+    /* Face lateral esq */
+    .tecla-branca .face-left {
+      position: absolute;
+      top: 4px;
+      left: -1px;
+      width: var(--key-depth);
+      height: calc(100% - 4px);
+      background: #b8b4ac;
+      transform-origin: right;
+      transform: rotateY(-90deg);
+      transform: skewY(0deg);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+ 
+    .tecla-branca:hover .face-top {
+      background: linear-gradient(170deg, #f8f5f0 0%, #e8e4dc 100%);
+    }
+ 
     .tecla-branca.pressionada {
-      background: var(--gold);
-      transform: translateY(2px);
+      transform: translateY(calc(var(--key-depth) * 0.7));
     }
+    .tecla-branca.pressionada .face-top {
+      background: linear-gradient(170deg, var(--gold) 0%, #d4a830 100%);
+    }
+    .tecla-branca.pressionada .face-front {
+      height: calc(var(--key-depth) * 0.3);
+      bottom: calc(-1 * var(--key-depth) * 0.3);
+    }
+ 
     .tecla-branca .nota-label {
       font-family: var(--font-disp);
       font-size: clamp(13px, 2vw, 16px);
       letter-spacing: 1px;
-      color: #333;
+      color: #3a3630;
     }
     .tecla-branca .key-hint {
       font-size: 9px;
@@ -183,47 +258,75 @@
       color: rgba(0,0,0,0.3);
       text-transform: uppercase;
     }
-
-    /* Teclas pretas */
+ 
+    /* ─── TECLA PRETA 3D ── */
     .tecla-preta {
       position: absolute;
-      width: clamp(28px, 4.5vw, 40px);
+      width: clamp(28px, 4.5vw, 42px);
       height: 58%;
-      background: #1a1a1a;
-      border: 1px solid rgba(255,255,255,0.06);
-      border-bottom: 3px solid #000;
-      border-radius: 0 0 4px 4px;
-      cursor: pointer;
-      z-index: 2;
       top: 0;
+      z-index: 2;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transform-style: preserve-3d;
+      transition: transform 0.08s ease;
+    }
+ 
+    .tecla-preta .face-top {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(170deg, #282828 0%, #111 100%);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 0 0 4px 4px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
       padding-bottom: 6px;
       gap: 2px;
-      transition: background 0.08s ease;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        inset -1px 0 0 rgba(255,255,255,0.04);
     }
-    .tecla-preta:hover { background: #2a2a2a; }
+ 
+    .tecla-preta .face-front {
+      position: absolute;
+      bottom: calc(-1 * var(--key-depth) * 0.75);
+      left: 0; right: 0;
+      height: calc(var(--key-depth) * 0.75);
+      background: linear-gradient(to bottom, #0a0a0a, #050505);
+      border-radius: 0 0 3px 3px;
+    }
+ 
+    .tecla-preta:hover .face-top {
+      background: linear-gradient(170deg, #333 0%, #1a1a1a 100%);
+    }
+ 
     .tecla-preta.pressionada {
-      background: rgba(232,200,74,0.6);
-      transform: translateY(2px);
+      transform: translateY(calc(var(--key-depth) * 0.6));
     }
+    .tecla-preta.pressionada .face-top {
+      background: linear-gradient(170deg, rgba(232,200,74,0.7) 0%, rgba(180,150,30,0.6) 100%);
+    }
+    .tecla-preta.pressionada .face-front {
+      height: calc(var(--key-depth) * 0.2);
+      bottom: calc(-1 * var(--key-depth) * 0.2);
+    }
+ 
     .tecla-preta .nota-label {
       font-family: var(--font-disp);
       font-size: clamp(9px, 1.5vw, 11px);
       letter-spacing: 0.5px;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255,255,255,0.45);
     }
     .tecla-preta .key-hint {
       font-size: 8px;
-      color: rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.18);
       letter-spacing: 0.5px;
       text-transform: uppercase;
     }
-
+ 
     /* ─── Controles ── */
     .controls-row {
       display: flex;
@@ -245,7 +348,7 @@
     }
     .btn-ctrl:hover { background: var(--bg-hover); color: var(--text); border-color: rgba(255,255,255,0.1); }
     .btn-ctrl.ativo { color: var(--gold); border-color: rgba(232,200,74,0.35); }
-
+ 
     /* ─── Gravação ── */
     .gravacao-bar {
       width: 100%;
@@ -259,8 +362,7 @@
       border-radius: var(--radius-sm);
     }
     .rec-dot {
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       background: rgba(255,80,80,0.3);
       flex-shrink: 0;
@@ -289,7 +391,7 @@
       white-space: nowrap;
       max-width: 200px;
     }
-
+ 
     .footer {
       padding: 1rem var(--pad-x);
       border-top: 0.5px solid var(--border);
@@ -297,4 +399,16 @@
       color: rgba(240,237,232,0.18);
       letter-spacing: 1px;
       margin-top: 1rem;
+    }
+ 
+    /* Sombra do teclado no chão */
+    .teclado-sombra {
+      width: fit-content;
+      height: 20px;
+      background: transparent;
+      filter: blur(12px);
+      margin: -8px auto 0;
+      opacity: 0.5;
+      transform: scaleY(0.4) perspective(400px) rotateX(60deg);
+      pointer-events: none;
     }

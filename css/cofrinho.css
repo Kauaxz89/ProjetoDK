@@ -1,0 +1,369 @@
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0d;
+      --bg-card:   #111111;
+      --bg-hover:  #1a1a1a;
+      --text:      #f0ede8;
+      --muted:     rgba(240, 237, 232, 0.4);
+      --faint:     rgba(240, 237, 232, 0.08);
+      --gold:      #e8c84a;
+      --gold-h:    #f5d86a;
+      --border:    rgba(255, 255, 255, 0.06);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --font-disp: 'Bebas Neue', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --pad-x: clamp(1rem, 4vw, 2.5rem);
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .header {
+      padding: clamp(1.5rem, 5vw, 3rem) var(--pad-x) 1rem;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      animation: fadeUp 0.7s ease forwards;
+      opacity: 0;
+    }
+    .header h1 {
+      font-family: var(--font-disp);
+      font-size: clamp(32px, 8vw, 64px);
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+    .header a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 1.5px;
+      transition: color 0.2s;
+    }
+    .header a:hover { color: var(--gold); }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    main {
+      padding: clamp(2rem, 5vw, 3.5rem) var(--pad-x);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ─── Cofre visual ── */
+    .cofre-wrap {
+      width: 100%;
+      position: relative;
+    }
+
+    .cofre-svg-container {
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .cofre-svg {
+      width: 140px;
+      filter: drop-shadow(0 0 0px transparent);
+      transition: filter 0.4s ease;
+    }
+
+    .cofre-svg.cheio {
+      filter: drop-shadow(0 0 16px rgba(232,200,74,0.35));
+    }
+
+    /* barra de preenchimento */
+    .cofre-fill-bar {
+      margin-top: 1.25rem;
+      width: 100%;
+      height: 4px;
+      background: var(--faint);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .cofre-fill-inner {
+      height: 100%;
+      width: 0%;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .cofre-fill-label {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1.5px;
+    }
+
+    /* ─── Saldo ── */
+    .saldo-card {
+      width: 100%;
+      padding: clamp(1.25rem, 3vw, 2rem);
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+    .saldo-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .saldo-valor {
+      font-family: var(--font-disp);
+      font-size: clamp(40px, 10vw, 64px);
+      letter-spacing: 3px;
+      color: var(--gold);
+      line-height: 1.1;
+      transition: transform 0.2s ease;
+    }
+    .saldo-valor.pulsar {
+      animation: pulsar 0.3s ease;
+    }
+    @keyframes pulsar {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.06); }
+      100% { transform: scale(1); }
+    }
+
+    /* ─── Moedas individuais ── */
+    .moedas-detalhe {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .moeda-item {
+      background: var(--bg-card);
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .moeda-item-val {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+    }
+    .moeda-item-qtd {
+      font-family: var(--font-disp);
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: var(--text);
+      margin-top: 4px;
+    }
+
+    /* ─── Botões moedas ── */
+    .moedas-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .btn-moeda {
+      padding: 14px 8px;
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-disp);
+      font-size: 16px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, transform 0.12s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-moeda:hover {
+      background: var(--bg-hover);
+      border-color: rgba(232,200,74,0.25);
+      transform: translateY(-2px);
+    }
+    .btn-moeda:active { transform: scale(0.95); }
+
+    /* partícula de moeda */
+    .particula {
+      position: fixed;
+      pointer-events: none;
+      font-size: 18px;
+      z-index: 999;
+      animation: subir 0.8s ease forwards;
+    }
+    @keyframes subir {
+      0%   { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-80px) scale(0.5); }
+    }
+
+    /* ─── Ações ── */
+    .acoes {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-acao {
+      padding: 13px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      border: 0.5px solid var(--border);
+      transition: background 0.15s, transform 0.12s, border-color 0.15s;
+    }
+    .btn-acao:hover { transform: scale(1.02); }
+    .btn-acao:active { transform: scale(0.97); }
+
+    .btn-sacar {
+      background: var(--bg-card);
+      color: var(--gold);
+      border-color: rgba(232,200,74,0.2);
+    }
+    .btn-sacar:hover {
+      background: rgba(232,200,74,0.08);
+      border-color: rgba(232,200,74,0.4);
+    }
+
+    .btn-esvaziar {
+      background: var(--bg-card);
+      color: rgba(240,237,232,0.35);
+    }
+    .btn-esvaziar:hover {
+      background: rgba(255,80,80,0.06);
+      border-color: rgba(255,80,80,0.2);
+      color: rgba(255,120,120,0.7);
+    }
+
+    /* ─── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1a1a1a;
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 24px;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s;
+      opacity: 0;
+      z-index: 1000;
+      white-space: nowrap;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+    .toast.erro { color: rgba(255,120,120,0.8); border-color: rgba(255,80,80,0.2); }
+
+    /* ─── Modal saque ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: #161616;
+      border: 0.5px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      width: min(360px, 90vw);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .modal h3 {
+      font-family: var(--font-disp);
+      font-size: 28px;
+      letter-spacing: 2px;
+    }
+    .modal-input-wrap {
+      position: relative;
+    }
+    .modal-prefix {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-disp);
+      font-size: 18px;
+      color: var(--muted);
+    }
+    .modal input {
+      width: 100%;
+      padding: 12px 14px 12px 36px;
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-disp);
+      font-size: 22px;
+      letter-spacing: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .modal input:focus { border-color: rgba(232,200,74,0.4); }
+    .modal-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .modal-btns button {
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 0.5px solid var(--border);
+      transition: background 0.15s;
+    }
+    .modal-confirmar {
+      background: var(--gold);
+      color: #0d0d0d;
+      border-color: var(--gold) !important;
+    }
+    .modal-confirmar:hover { background: var(--gold-h); }
+    .modal-cancelar {
+      background: var(--bg-card);
+      color: var(--muted);
+    }
+    .modal-cancelar:hover { background: var(--bg-hover); }
+
+    .footer {
+      padding: 1rem var(--pad-x);
+      border-top: 0.5px solid var(--border);
+      font-size: 11px;
+      color: rgba(240,237,232,0.18);
+      letter-spacing: 1px;
+      margin-top: 1rem;
+    }

@@ -1,0 +1,276 @@
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0d0d0d;
+      --bg-card:   #111111;
+      --bg-hover:  #1a1a1a;
+      --text:      #f0ede8;
+      --muted:     rgba(240, 237, 232, 0.4);
+      --faint:     rgba(240, 237, 232, 0.08);
+      --gold:      #e8c84a;
+      --gold-h:    #f5d86a;
+      --border:    rgba(255, 255, 255, 0.06);
+      --accent:    #e8c84a;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --font-disp: 'Bebas Neue', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --pad-x: clamp(1rem, 4vw, 2.5rem);
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 1s ease;
+    }
+
+    body.modo-noturno {
+      --bg: #060608;
+      --bg-card: #0c0c10;
+      --bg-hover: #12121a;
+      --border: rgba(120,120,200,0.08);
+      --accent: #a78bfa;
+      background: var(--bg);
+    }
+
+    .header {
+      padding: clamp(1.5rem, 5vw, 3rem) var(--pad-x) 1rem;
+      border-bottom: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      animation: fadeUp 0.7s ease forwards;
+      opacity: 0;
+    }
+    .header h1 {
+      font-family: var(--font-disp);
+      font-size: clamp(32px, 8vw, 64px);
+      letter-spacing: 4px;
+      line-height: 1;
+    }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .btn-noturno {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-noturno:hover { color: var(--gold); border-color: rgba(232,200,74,0.2); }
+    .header a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 1.5px;
+      transition: color 0.2s;
+    }
+    .header a:hover { color: var(--gold); }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    main {
+      padding: clamp(2rem, 6vw, 4rem) var(--pad-x);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ─── Modo badge ── */
+    .modo-badge {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 5px 14px;
+      border: 0.5px solid var(--border);
+      border-radius: 20px;
+      transition: color 0.5s, border-color 0.5s;
+    }
+    .modo-badge.ativo {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* ─── Relógio circular ── */
+    .relogio-wrap {
+      position: relative;
+      width: min(260px, 70vw);
+      height: min(260px, 70vw);
+    }
+
+    .relogio-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .relogio-bg-circle {
+      fill: none;
+      stroke: var(--faint);
+      stroke-width: 3;
+    }
+
+    .relogio-progress {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 3;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear, stroke 0.5s ease;
+    }
+
+    .relogio-centro {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .tempo-display {
+      font-family: var(--font-disp);
+      font-size: clamp(44px, 14vw, 64px);
+      letter-spacing: 4px;
+      line-height: 1;
+      transition: color 0.5s;
+    }
+    .tempo-display.urgente { color: #ff6b6b; }
+
+    .sessoes-display {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── Controles tempo ── */
+    .config-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .config-item {
+      background: var(--bg-card);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+    }
+    .config-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .config-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: space-between;
+    }
+    .config-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--faint);
+      border: 0.5px solid var(--border);
+      color: var(--text);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      line-height: 1;
+      padding-bottom: 1px;
+    }
+    .config-btn:hover { background: rgba(232,200,74,0.1); }
+    .config-val {
+      font-family: var(--font-disp);
+      font-size: 24px;
+      letter-spacing: 2px;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    /* ─── Botões principais ── */
+    .btns-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-principal {
+      padding: 14px 8px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-disp);
+      font-size: 18px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border: 0.5px solid var(--border);
+      transition: background 0.15s, transform 0.12s, border-color 0.15s;
+    }
+    .btn-principal:hover { transform: translateY(-2px); }
+    .btn-principal:active { transform: scale(0.96); }
+
+    .btn-iniciar {
+      background: var(--accent);
+      color: #0d0d0d;
+      border-color: var(--accent);
+    }
+    .btn-iniciar:hover { filter: brightness(1.1); }
+
+    .btn-pausar {
+      background: var(--bg-card);
+      color: var(--text);
+    }
+    .btn-pausar:hover { background: var(--bg-hover); border-color: rgba(255,255,255,0.12); }
+
+    .btn-resetar {
+      background: var(--bg-card);
+      color: var(--muted);
+    }
+    .btn-resetar:hover { background: var(--bg-hover); }
+
+    /* ─── Progresso sessões ── */
+    .sessoes-track {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .sessao-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--faint);
+      border: 0.5px solid var(--border);
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+    .sessao-dot.feita {
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    .footer {
+      padding: 1rem var(--pad-x);
+      border-top: 0.5px solid var(--border);
+      font-size: 11px;
+      color: rgba(240,237,232,0.18);
+      letter-spacing: 1px;
+      margin-top: auto;
+    }
