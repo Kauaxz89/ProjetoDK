@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Luz</title>
+  <link rel="stylesheet" href="css/controleLuz.css">
+</head>
+<body>
+
+<div class="root">
+  <div class="cl-header">
+    <a class="cl-back" href="index.html">← Voltar</a>
+    <div class="cl-title">Controle de Luz</div>
+    <div class="cl-sub">Simulador de interruptor</div>
+  </div>
+
+  <div class="scene" id="scene">
+
+    <!-- TETO -->
+    <div class="ceiling" id="ceiling"><div class="ceiling-molding" id="cmold"></div></div>
+
+    <!-- FIO -->
+    <div class="wire" id="wire"></div>
+
+    <!-- LÂMPADA -->
+    <div class="lamp-wrap" id="lampWrap">
+      <div class="lamp-socket" id="lsocket"></div>
+      <div style="position:relative; display:flex; justify-content:center; align-items:flex-start;">
+        <div class="lamp-halo" id="halo"></div>
+        <svg class="lamp-svg" id="lampSvg" viewBox="0 0 54 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- bulbo -->
+          <ellipse id="bulb-body" cx="27" cy="30" rx="18" ry="20" fill="rgba(200,180,140,0.15)" stroke="rgba(200,180,140,0.3)" stroke-width="1.2"/>
+          <!-- filamento -->
+          <path id="filament" d="M22 30 Q24 26 27 30 Q30 34 32 30" stroke="rgba(200,180,140,0.35)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <!-- base -->
+          <rect id="base1" x="20" y="47" width="14" height="5" rx="1" fill="rgba(180,160,120,0.2)" stroke="rgba(180,160,120,0.25)" stroke-width="0.8"/>
+          <rect id="base2" x="22" y="52" width="10" height="4" rx="0.5" fill="rgba(180,160,120,0.15)" stroke="rgba(180,160,120,0.2)" stroke-width="0.8"/>
+          <!-- brilho interno (escuro) -->
+          <ellipse id="inner-glow" cx="27" cy="28" rx="10" ry="11" fill="rgba(255,200,80,0)" opacity="0"/>
+          <!-- reflexo no vidro -->
+          <ellipse id="shine" cx="20" cy="22" rx="4" ry="5" fill="rgba(255,255,255,0.05)" transform="rotate(-20,20,22)"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- CONE DE LUZ -->
+    <div class="light-cone" id="cone"></div>
+
+    <!-- PAREDES -->
+    <div class="wall-left" id="wallL"></div>
+    <div class="wall-right" id="wallR"></div>
+    <div class="wall-back" id="wallB"></div>
+    <div class="baseboard" id="base"></div>
+
+    <!-- JANELA -->
+    <div class="window" id="win"><div class="window-sky" id="winSky"></div></div>
+    <div class="moonlight" id="moonlight"></div>
+
+    <!-- QUADRO -->
+    <div class="picture" id="pic"><div class="picture-inner" id="picInner"></div></div>
+
+    <!-- INTERRUPTOR (clicável) -->
+    <div class="switch-box" id="switchBox">
+      <div class="switch-plate" id="plate">
+        <div class="switch-toggle" id="toggle"></div>
+      </div>
+      <div class="switch-label-txt" id="swlbl">OFF</div>
+    </div>
+
+    <!-- MESA -->
+    <div class="table" id="tableEl">
+      <div style="position:relative; width:90px; height:60px;">
+        <div class="desk-lamp">
+          <div style="position:relative; display:flex; flex-direction:column; align-items:center;">
+            <div class="dl-glow" id="dlglow"></div>
+            <div class="dl-shade" id="dlshade"></div>
+            <div class="dl-pole" id="dlpole"></div>
+            <div class="dl-base" id="dlbase"></div>
+          </div>
+        </div>
+        <div class="books">
+          <div class="book b1" id="b1"></div>
+          <div class="book b2" id="b2"></div>
+          <div class="book b3" id="b3"></div>
+        </div>
+      </div>
+      <div class="table-top" id="tabletop"></div>
+      <div class="table-legs">
+        <div class="table-leg" id="tleg1"></div>
+        <div class="table-leg" id="tleg2"></div>
+      </div>
+    </div>
+
+    <!-- CADEIRA -->
+    <div class="chair" id="chairEl">
+      <div class="chair-back" id="chback"></div>
+      <div class="chair-seat" id="chseat"></div>
+      <div class="chair-legs">
+        <div class="chair-leg" id="chleg1"></div>
+        <div class="chair-leg" id="chleg2"></div>
+      </div>
+    </div>
+
+    <!-- PERSONAGEM -->
+    <div class="char" id="char">
+      <div class="hearts" id="hearts">
+        <div class="heart">❤️</div>
+        <div class="heart">💛</div>
+        <div class="heart">💚</div>
+      </div>
+      <div class="head" id="head">
+        <div class="hat" id="hat">
+          <div class="hat-top"></div>
+          <div class="hat-brim"></div>
+        </div>
+        <div class="horns" id="horns">
+          <div class="horn"></div>
+          <div class="horn"></div>
+        </div>
+        <div class="cheek cheek-l" id="ckL"></div>
+        <div class="cheek cheek-r" id="ckR"></div>
+        <div class="brow brow-l" id="brL"></div>
+        <div class="brow brow-r" id="brR"></div>
+        <div class="eye eye-l" id="eyL"></div>
+        <div class="eye eye-r" id="eyR"></div>
+        <div class="mouth" id="mth"><div class="teeth" id="teeth"></div></div>
+      </div>
+      <div class="body" id="body">
+        <div class="arm arm-l" id="armL"></div>
+        <div class="arm arm-r" id="armR"></div>
+      </div>
+      <div class="legs">
+        <div style="display:flex;flex-direction:column;align-items:flex-end;">
+          <div class="leg" id="legL"></div>
+          <div class="shoe left"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;">
+          <div class="leg" id="legR"></div>
+          <div class="shoe"></div>
+        </div>
+      </div>
+      <div class="char-shadow"></div>
+    </div>
+
+    <!-- PARTÍCULAS DE SUSTO -->
+    <div class="spook-particles" id="spooks">
+      <div class="spook-particle" style="left:10%;top:30%;animation-delay:0s;">👻</div>
+      <div class="spook-particle" style="left:80%;top:25%;animation-delay:1s;">🕷️</div>
+      <div class="spook-particle" style="left:25%;top:60%;animation-delay:2s;">💀</div>
+      <div class="spook-particle" style="left:70%;top:55%;animation-delay:0.5s;">🦇</div>
+    </div>
+
+    <!-- LUZ NO CHÃO -->
+    <div class="floor" id="floor">
+      <div class="floor-plank" style="top:25%;"></div>
+      <div class="floor-plank" style="top:55%;"></div>
+      <div class="floor-plank" style="top:80%;"></div>
+      <div class="floor-light" id="floorLight"></div>
+    </div>
+
+  </div>
+
+  <!-- PAINEL -->
+  <div class="panel">
+    <div class="counter-wrap">
+      <span class="counter-lbl">Vezes acesa</span>
+      <span class="counter-val" id="cnt">0</span>
+    </div>
+    <div class="switch-row">
+      <span class="estado" id="estado">APAGADA</span>
+      <button class="sw-btn" id="btn">
+        <span class="sw-track" id="track"><span class="sw-thumb" id="thumb"></span></span>
+        <span class="sw-txt" id="btxt">LIGAR</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="cl-footer">© 2026 — Controle de Luz</div>
+</div>
+
+<script src="js/controleLuz.js"></script>
+</body>
+</html>
