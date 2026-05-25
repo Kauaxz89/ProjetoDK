@@ -1,4 +1,4 @@
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
  
     :root {
       --bg:        #0d0d0d;
@@ -138,27 +138,25 @@
        TECLADO 3D
        Abordagem: perspectiva CSS + faces simuladas
     ─────────────────────────────────────────────── */
-    .teclado-scene {
+    .teclado-container {
       width: 100%;
       overflow-x: auto;
-      padding-bottom: 24px;
-      /* perspectiva para dar sensação de profundidade 3D leve */
-      perspective: 800px;
+      padding-bottom: 32px;
+      perspective: 900px;
+      display: flex;
+      justify-content: center;
     }
- 
-    .teclado-stage {
+
+    .teclado {
       display: inline-flex;
       align-items: flex-start;
       gap: 0;
       position: relative;
-      /* Inclinar o teclado levemente como se visto de cima */
       transform: rotateX(18deg) rotateY(-2deg);
       transform-style: preserve-3d;
       transform-origin: center top;
-      margin: 0 auto;
-      display: flex;
-      width: fit-content;
-      height: clamp(180px, 30vw, 240px);
+      height: clamp(160px, 28vw, 220px);
+      flex-shrink: 0;
     }
  
     /* ─── BASE DO TECLADO ── */
@@ -166,10 +164,9 @@
       position: absolute;
       bottom: calc(-1 * var(--key-depth) - 4px);
       left: -8px; right: -8px;
-      height: 24px;
+      height: 20px;
       background: #1a1a1a;
       border-radius: 0 0 8px 8px;
-      transform: translateZ(calc(-1 * var(--key-depth)));
       box-shadow: 0 8px 32px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.5);
     }
  
