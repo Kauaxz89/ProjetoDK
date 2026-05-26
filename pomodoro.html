@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomodoro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/pomodoro.css">
+</head>
+<body>
+
+  <header class="header">
+    <h1>Pomodoro</h1>
+    <div class="header-right">
+      <button class="btn-noturno" onclick="toggleNoturno()" id="btn-noturno">🌙 Noturno</button>
+      <a href="index.html">← Voltar</a>
+    </div>
+  </header>
+
+  <main>
+
+    <div class="modo-badge" id="modo-badge">FOCO</div>
+
+    <!-- Relógio circular -->
+    <div class="relogio-wrap">
+      <svg class="relogio-svg" id="relogio-svg" viewBox="0 0 100 100">
+        <circle class="relogio-bg-circle" cx="50" cy="50" r="46"/>
+        <circle class="relogio-progress" id="progress-circle"
+          cx="50" cy="50" r="46"
+          stroke-dasharray="289"
+          stroke-dashoffset="0"/>
+      </svg>
+      <div class="relogio-centro">
+        <div class="tempo-display" id="tempo-display">25:00</div>
+        <div class="sessoes-display" id="sessoes-display">Sessão 1 de 4</div>
+      </div>
+    </div>
+
+    <!-- Sessões -->
+    <div class="sessoes-track">
+      <div class="sessao-dot" id="dot-0"></div>
+      <div class="sessao-dot" id="dot-1"></div>
+      <div class="sessao-dot" id="dot-2"></div>
+      <div class="sessao-dot" id="dot-3"></div>
+    </div>
+
+    <!-- Config tempo -->
+    <div class="config-grid">
+      <div class="config-item">
+        <div class="config-label">Foco (min)</div>
+        <div class="config-row">
+          <button class="config-btn" onclick="ajustarTempo('foco', -1)">−</button>
+          <span class="config-val" id="cfg-foco">25</span>
+          <button class="config-btn" onclick="ajustarTempo('foco', 1)">+</button>
+        </div>
+      </div>
+      <div class="config-item">
+        <div class="config-label">Pausa (min)</div>
+        <div class="config-row">
+          <button class="config-btn" onclick="ajustarTempo('pausa', -1)">−</button>
+          <span class="config-val" id="cfg-pausa">5</span>
+          <button class="config-btn" onclick="ajustarTempo('pausa', 1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botões -->
+    <div class="btns-grid">
+      <button class="btn-principal btn-iniciar" id="btn-iniciar" onclick="iniciar()">INICIAR</button>
+      <button class="btn-principal btn-pausar"  id="btn-pausar"  onclick="pausar()" disabled>PAUSAR</button>
+      <button class="btn-principal btn-resetar" onclick="resetar()">RESET</button>
+    </div>
+
+  </main>
+
+  <footer class="footer"><p>© 2026</p></footer>
+    <script src="js/pomodoro.js"></script>
+</body>
+</html>
